@@ -40,7 +40,7 @@ background-color: rgb(114, 159, 207);</string>
      <attribute name="title">
       <string>VENDAS</string>
      </attribute>
-     <widget class="QLineEdit" name="cpCodigo">
+     <widget class="QLineEdit" name="cpCodigoVenda">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -69,7 +69,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>CODIGO DO PRODUTO</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btBuscarProduto">
+     <widget class="QPushButton" name="btBuscarProdutoVenda">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -91,7 +91,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>BUSCAR PRODUTO</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btAdicionar">
+     <widget class="QPushButton" name="btAdicionarVenda">
       <property name="geometry">
        <rect>
         <x>530</x>
@@ -132,7 +132,7 @@ background-color: rgb(114, 159, 207);</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="lbPrecoTotal">
+      <widget class="QLabel" name="lbPrecoTotalVenda">
        <property name="geometry">
         <rect>
          <x>110</x>
@@ -172,7 +172,7 @@ background-color: rgb(114, 159, 207);</string>
        </property>
       </widget>
       <zorder>label_9</zorder>
-      <zorder>lbPrecoTotal</zorder>
+      <zorder>lbPrecoTotalVenda</zorder>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
@@ -203,7 +203,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(211, 215, 207);</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btRetirarItem">
+     <widget class="QPushButton" name="btRetirarItemVenda">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -225,7 +225,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>RETIRAR ITEM</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="cbFormaPagamento">
+     <widget class="QComboBox" name="cbFormaPagamentoVenda">
       <property name="geometry">
        <rect>
         <x>600</x>
@@ -269,7 +269,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>FORMA DE PAGAMENTO</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btCancelarCompra">
+     <widget class="QPushButton" name="btCancelarCompraVenda">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -291,7 +291,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>CANCELAR COMPRA</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btPagar">
+     <widget class="QPushButton" name="btPagarVenda">
       <property name="geometry">
        <rect>
         <x>850</x>
@@ -313,7 +313,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>PAGAR</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpProduto">
+     <widget class="QLineEdit" name="cpProdutoVenda">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -326,7 +326,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpQuantidade">
+     <widget class="QLineEdit" name="cpQuantidadeVenda">
       <property name="geometry">
        <rect>
         <x>270</x>
@@ -440,7 +440,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>PRECO</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpCodigo_2">
+     <widget class="QLineEdit" name="cpCodigoCadastro">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -453,7 +453,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpProduto_2">
+     <widget class="QLineEdit" name="cpProdutoCadastro">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -466,7 +466,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpQuantidade_2">
+     <widget class="QLineEdit" name="cpQuantidadeCadastro">
       <property name="geometry">
        <rect>
         <x>560</x>
@@ -479,7 +479,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpPreco">
+     <widget class="QLineEdit" name="cpPrecoCadastro">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -508,7 +508,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>CATEGORIA</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btCadastrar">
+     <widget class="QPushButton" name="btCadastrarCadastro">
       <property name="geometry">
        <rect>
         <x>390</x>
@@ -537,7 +537,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>ESTOQUE MINIMO</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpEstoqueMinimo">
+     <widget class="QLineEdit" name="cpEstoqueMinimoCadastro">
       <property name="geometry">
        <rect>
         <x>560</x>
@@ -550,7 +550,7 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="cpCategoria">
+     <widget class="QLineEdit" name="cpCategoriaCadastro">
       <property name="geometry">
        <rect>
         <x>560</x>
@@ -568,20 +568,7 @@ background-color: rgb(114, 159, 207);</string>
      <attribute name="title">
       <string>VERIFICAR ESTOQUE</string>
      </attribute>
-     <widget class="QTableView" name="tableView_2">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>50</y>
-        <width>971</width>
-        <height>401</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(238, 238, 236);</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btExcluir">
+     <widget class="QPushButton" name="btExcluirEstoque">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -594,7 +581,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>EXCLUIR</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btEditar">
+     <widget class="QPushButton" name="btEditarEstoque">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -620,7 +607,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>GERAR PDF</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btPesquisar">
+     <widget class="QPushButton" name="btPesquisarEstoque">
       <property name="geometry">
        <rect>
         <x>830</x>
@@ -633,7 +620,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>PESQUISAR</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="rbEstoqueMinimo">
+     <widget class="QRadioButton" name="rbEstoqueMinimoEstoque">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -655,7 +642,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>ESTOQUE MINIMO</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="rbSemEstoque">
+     <widget class="QRadioButton" name="rbSemEstoqueEstoque">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -677,7 +664,7 @@ background-color: rgb(114, 159, 207);</string>
        <string>SEM ESTOQUE</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="rbCategoria">
+     <widget class="QRadioButton" name="rbCategoriaEstoque">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -698,6 +685,185 @@ background-color: rgb(114, 159, 207);</string>
       <property name="text">
        <string>CATEGORIA</string>
       </property>
+     </widget>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>981</width>
+        <height>441</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>981</width>
+        <height>441</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>6</number>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>163</number>
+      </attribute>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>CODIGO</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>PRODUTO</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>CATEGORIA</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ESTOQUE MINIMO</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>QUANTIDADE</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>PRECO</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+       <property name="background">
+        <color>
+         <red>252</red>
+         <green>175</green>
+         <blue>62</blue>
+        </color>
+       </property>
+      </column>
      </widget>
     </widget>
    </widget>
