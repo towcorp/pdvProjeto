@@ -12,7 +12,11 @@ Tecnologias utilizadas:
 
 
 [x] CRIAR TELAS
+
 [x] CRIAR BASE DE DADOS
+
 [x] SINCRONIZAR BASE DE DADOS 
+
 [ ] APLICAR INTERAÇÃO DOS COMANDOS
+
 [ ] ....
