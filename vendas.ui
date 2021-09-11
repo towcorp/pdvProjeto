@@ -646,7 +646,7 @@ background-color: rgb(114, 159, 207);</string>
       <property name="geometry">
        <rect>
         <x>660</x>
-        <y>520</y>
+        <y>550</y>
         <width>161</width>
         <height>23</height>
        </rect>
@@ -661,14 +661,14 @@ background-color: rgb(114, 159, 207);</string>
        <string notr="true">color: rgb(252, 233, 79);</string>
       </property>
       <property name="text">
-       <string>SEM ESTOQUE</string>
+       <string>MOSTRAR TODOS</string>
       </property>
      </widget>
      <widget class="QRadioButton" name="rbCategoriaEstoque">
       <property name="geometry">
        <rect>
         <x>660</x>
-        <y>550</y>
+        <y>520</y>
         <width>161</width>
         <height>23</height>
        </rect>

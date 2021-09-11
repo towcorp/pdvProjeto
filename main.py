@@ -51,13 +51,45 @@ def cadastrarProduto():
 
 def consultarEstoque():
 
-    cursor = banco.cursor()
-    comando_SQL = "SELECT * FROM produtos"
-    cursor.execute(comando_SQL)
-    dados_lidos = cursor.fetchall()
-    print(dados_lidos)
-    vendas.tableWidget.setRowCount(len(dados_lidos))
-    vendas.tableWidget.setColumnCount(6)
+    cursor = banco.cursor()    
+
+    categoria = ""
+    
+    if vendas.rbEstoqueMinimoEstoque.isChecked():
+        categoria = "estoque minimo"
+
+        comando_SQL = "SELECT * FROM produtos WHERE quantidade <= estoque_minimo ORDER BY quantidade"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+        #print(dados_lidos)
+        vendas.tableWidget.setRowCount(len(dados_lidos))
+        vendas.tableWidget.setColumnCount(6)    
+
+
+
+    elif vendas.rbCategoriaEstoque.isChecked():
+        categoria = "categoria"
+
+        comando_SQL = "SELECT * FROM produtos GROUP BY codigo ORDER BY categoria"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+        #print(dados_lidos)
+        vendas.tableWidget.setRowCount(len(dados_lidos))
+        vendas.tableWidget.setColumnCount(6)    
+
+    else:   
+        comando_SQL = "SELECT * FROM produtos"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+        #print(dados_lidos)
+        vendas.tableWidget.setRowCount(len(dados_lidos))
+        vendas.tableWidget.setColumnCount(6)    
+
+
+
+    
+    
+    
 
     for i in range(0, len(dados_lidos)):
         for j in range(0, 6):
@@ -65,13 +97,7 @@ def consultarEstoque():
 
 
 
-    categoria = ""
-    if vendas.rbEstoqueMinimoEstoque.isChecked():
-        categoria = "estoque minimo"
-    elif vendas.rbSemEstoqueEstoque.isChecked():
-        categoria = "sem estoque"
-    else:
-        categoria = "categoria"
+
     
 
 
