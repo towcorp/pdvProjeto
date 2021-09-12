@@ -135,9 +135,9 @@ background-color: rgb(114, 159, 207);</string>
       <widget class="QLabel" name="lbPrecoTotalVenda">
        <property name="geometry">
         <rect>
-         <x>110</x>
+         <x>10</x>
          <y>30</y>
-         <width>191</width>
+         <width>301</width>
          <height>81</height>
         </rect>
        </property>
@@ -157,7 +157,7 @@ background-color: rgb(114, 159, 207);</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
+         <y>0</y>
          <width>41</width>
          <height>41</height>
         </rect>
@@ -171,8 +171,6 @@ background-color: rgb(114, 159, 207);</string>
         <string>R$</string>
        </property>
       </widget>
-      <zorder>label_9</zorder>
-      <zorder>lbPrecoTotalVenda</zorder>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
@@ -421,14 +419,20 @@ background-color: rgb(114, 159, 207);</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
+       <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
       </property>
       <property name="autoScrollMargin">
        <number>41</number>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>198</number>
+       <number>166</number>
       </attribute>
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>CODIGO</string>

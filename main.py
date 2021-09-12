@@ -19,42 +19,139 @@ banco = mysql.connector.connect(
     database="estoque_produtos"
 )
 
+
+
 #============================================================================================
 
-def venderProdutos():
+def pesquisar_produto():
     
     cursor = banco.cursor() 
  
     if vendas.rbProdutoVenda.isChecked():
         
-        item = vendas.cpPesquisaVenda.text()
-
-        comando_SQL = "SELECT * FROM produtos WHERE produto LIKE '{}'".format(item)
+        try:
         
-        cursor.execute(comando_SQL)
-        dados_lidos = cursor.fetchall()
+            item = vendas.cpPesquisaVenda.text()
+            
+            comando_SQL = "SELECT * FROM produtos WHERE produto LIKE '{}'".format(item)
+            
+            cursor.execute(comando_SQL)
+            
+            dados_lidos = cursor.fetchall()
 
-        vendas.lbItemVenda.setText(dados_lidos[0][1])
+            
 
-  
+            vendas.lbItemVenda.setText(dados_lidos[0][1])
+
+        except IndexError:
+
+            
+            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            
   
   
     else:
-        item = vendas.cpPesquisaVenda.text()
 
-        comando_SQL = "SELECT * FROM produtos WHERE codigo = {}".format(item)
-        cursor.execute(comando_SQL)
-        dados_lidos = cursor.fetchall()
-       
+        try:
+            item = vendas.cpPesquisaVenda.text()
+
+            comando_SQL = "SELECT * FROM produtos WHERE codigo = {}".format(item)
+            cursor.execute(comando_SQL)
+            dados_lidos = cursor.fetchall()
         
-        vendas.lbItemVenda.setText(dados_lidos[0][1])
+            
+            vendas.lbItemVenda.setText(dados_lidos[0][1])
+
+
+        except IndexError:
+
+            
+            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+    
+
+    return dados_lidos
  
- 
- 
+def adicionar_item():
+
+    lista = pesquisar_produto()
+
+    
+
+    if lista:
+        linha1 = lista[0][0]
+        linha2 = lista[0][1]
+        
+        qtde = vendas.cpQuantidadeVenda.text()
+        if vendas.cpQuantidadeVenda.text() == '':
+            qtde = 1
+            linha3 = qtde
+            
+        
+        else:
+        
+            
+            linha3 = qtde
+
+
+        linha4 = lista[0][5]
+
+        soma = round((float(qtde) * linha4),2)
+        linha5 = soma
+
+        
+        cursor = banco.cursor()
+        comando_SQL = "INSERT INTO vendasUnitarias(codigo,item,quantidade,preco_unitario, total) VALUES(%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+
+
+        vendas.tableWidget_2.setRowCount(len(lista))
+        vendas.tableWidget_2.setColumnCount(6)
+        
+
+        
+                
+    else:
+        print('erro')
+
+
+    cursor = banco.cursor()
+    comando_SQL = "SELECT * FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    for i in range(0, len(dados_lidos)):
+        for j in range(0, 6):
+            vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+
+    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    resultado = cursor.fetchall()
+    print(resultado)
+
+    vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
+
+    vendas.lbItemVenda.setText('')
+    vendas.cpQuantidadeVenda.setText('')
+    vendas.cpPesquisaVenda.text('')
 
 
 def cancelar_compra():
-    pass
+    cursor = banco.cursor()
+    comando_SQL = "DELETE FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+    print(dados_lidos)
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    vendas.lbPrecoTotalVenda.setText('0,00')
+
 
 def retirar_item():
     pass
@@ -304,9 +401,9 @@ def fechar_app():
 #===============================botoes ===================================================================
 
 #BOTOES VENDAS
-vendas.btBuscarProdutoVenda.clicked.connect(venderProdutos)
-#vendas.btAdicionarVenda.clicked.connect(venderProdutos)
-#vendas.btCancelarCompraVenda.clicked.connect(venderProdutos)
+vendas.btBuscarProdutoVenda.clicked.connect(pesquisar_produto)
+vendas.btAdicionarVenda.clicked.connect(adicionar_item)
+vendas.btCancelarCompraVenda.clicked.connect(cancelar_compra)
 #vendas.btRetirarItemVenda.clicked.connect(venderProdutos)
 #vendas.btPagarVenda.clicked.connect(venderProdutos)
 
