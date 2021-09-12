@@ -1,4 +1,4 @@
-from PyQt5 import  uic,QtWidgets
+from PyQt5 import  uic,QtWidgets,QtGui
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
 
 import mysql.connector
@@ -22,12 +22,47 @@ banco = mysql.connector.connect(
 #============================================================================================
 
 def venderProdutos():
-    print("funcionando")
-    linha1 = vendas.cpCodigoVenda.text()
-    print(linha1)
+    
+    cursor = banco.cursor() 
+ 
+    if vendas.rbProdutoVenda.isChecked():
+        
+        item = vendas.cpPesquisaVenda.text()
+
+        comando_SQL = "SELECT * FROM produtos WHERE produto LIKE '{}'".format(item)
+        
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+
+        vendas.lbItemVenda.setText(dados_lidos[0][1])
+
+  
+  
+  
+    else:
+        item = vendas.cpPesquisaVenda.text()
+
+        comando_SQL = "SELECT * FROM produtos WHERE codigo = {}".format(item)
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+       
+        
+        vendas.lbItemVenda.setText(dados_lidos[0][1])
+ 
+ 
+ 
 
 
+def cancelar_compra():
+    pass
 
+def retirar_item():
+    pass
+
+def pagamento():
+    pass
+
+#===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
 
     linha1 = vendas.cpCodigoCadastro.text()
@@ -51,6 +86,11 @@ def cadastrarProduto():
     vendas.cpPrecoCadastro.setText("")
 
 
+
+
+
+
+#===========================PAGINA ESTOQUE ====================================================
 def consultarEstoque():
 
     cursor = banco.cursor()    
@@ -263,20 +303,27 @@ def fechar_app():
 
 #===============================botoes ===================================================================
 
+#BOTOES VENDAS
 vendas.btBuscarProdutoVenda.clicked.connect(venderProdutos)
+#vendas.btAdicionarVenda.clicked.connect(venderProdutos)
+#vendas.btCancelarCompraVenda.clicked.connect(venderProdutos)
+#vendas.btRetirarItemVenda.clicked.connect(venderProdutos)
+#vendas.btPagarVenda.clicked.connect(venderProdutos)
 
-
+#BOTOES CADASTRO
 vendas.btCadastrarCadastro.clicked.connect(cadastrarProduto)
 
-
+#BOTOES ESTOQUE
 vendas.btPesquisarEstoque.clicked.connect(consultarEstoque)
 vendas.btEditarEstoque.clicked.connect(editar_dados)
 vendas.btExcluirEstoque.clicked.connect(excluir_dados)
 vendas.btPDF.clicked.connect(gerar_pdf)
 
+#BOTAO TELA EDITAR
 tela_editar.btSalvarEditar.clicked.connect(salvar_valor_editado)
 
 
+#FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)
 
 
