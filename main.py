@@ -128,6 +128,52 @@ def adicionar_item():
         for j in range(0, 6):
             vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
 
+    
+    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    resultado = cursor.fetchall()
+    print(resultado)
+
+    vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
+
+    vendas.lbItemVenda.setText('')
+    vendas.cpQuantidadeVenda.setText('')
+    vendas.cpPesquisaVenda.text('')
+    atualizar_tela_vendas()
+
+def cancelar_compra():
+    cursor = banco.cursor()
+    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    vendas.lbPrecoTotalVenda.setText('0,00')
+    
+
+def retirar_item():
+
+    linha = vendas.tableWidget_2.currentRow()
+    vendas.tableWidget_2.removeRow(linha)
+
+    cursor = banco.cursor()
+    comando_SQL = "SELECT id FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+       
+    print(linha)
+    print(dados_lidos)
+    #vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    #vendas.tableWidget_2.setColumnCount(6)    
+   
+
+    valor_id = dados_lidos[linha][0]
+    print(valor_id)
+    comando_SQL = 'DELETE FROM vendasUnitarias WHERE id="{}"'.format(str(valor_id))
+    cursor.execute(comando_SQL)
+
 
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
     cursor.execute(comando_SQL)
@@ -139,25 +185,27 @@ def adicionar_item():
     vendas.lbItemVenda.setText('')
     vendas.cpQuantidadeVenda.setText('')
     vendas.cpPesquisaVenda.text('')
-
-
-def cancelar_compra():
-    cursor = banco.cursor()
-    comando_SQL = "DELETE FROM vendasUnitarias"
-    cursor.execute(comando_SQL)
-    dados_lidos = cursor.fetchall()
-    print(dados_lidos)
-    vendas.tableWidget_2.setRowCount(len(dados_lidos))
-    vendas.tableWidget_2.setColumnCount(6)  
-
-    vendas.lbPrecoTotalVenda.setText('0,00')
-
-
-def retirar_item():
-    pass
+    atualizar_tela_vendas()
 
 def pagamento():
     pass
+
+
+def atualizar_tela_vendas():
+    vendas.show()
+
+    cursor = banco.cursor()
+    comando_SQL = "SELECT * FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)
+
+    for i in range(0, len(dados_lidos)):
+        for j in range(0, 5):
+           vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j]))) 
+
 
 #===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
@@ -227,6 +275,8 @@ def consultarEstoque():
         for j in range(0, 6):
             vendas.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
 
+
+
 def atualizar_tela():
     vendas.show()
 
@@ -293,6 +343,9 @@ def excluir_dados():
 
     cursor = banco.cursor()
 
+    linha = vendas.tableWidget.currentRow()
+    vendas.tableWidget.removeRow(linha)
+
     if vendas.rbEstoqueMinimoEstoque.isChecked():
         
 
@@ -322,13 +375,10 @@ def excluir_dados():
     vendas.tableWidget.setRowCount(len(dados_lidos))
     vendas.tableWidget.setColumnCount(6)    
 
-    linha = vendas.tableWidget.currentRow()
-    vendas.tableWidget.removeRow(linha)
-
-    
-
     valor_id = dados_lidos[linha][0]
     cursor.execute("DELETE FROM produtos WHERE codigo="+ str(valor_id))
+
+
 
 def gerar_pdf():
 
@@ -404,7 +454,7 @@ def fechar_app():
 vendas.btBuscarProdutoVenda.clicked.connect(pesquisar_produto)
 vendas.btAdicionarVenda.clicked.connect(adicionar_item)
 vendas.btCancelarCompraVenda.clicked.connect(cancelar_compra)
-#vendas.btRetirarItemVenda.clicked.connect(venderProdutos)
+vendas.btRetirarItemVenda.clicked.connect(retirar_item)
 #vendas.btPagarVenda.clicked.connect(venderProdutos)
 
 #BOTOES CADASTRO
