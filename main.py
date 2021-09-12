@@ -1,4 +1,4 @@
-from PyQt5 import  uic,QtWidgets
+from PyQt5 import  uic,QtWidgets,QtGui
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
 
 import mysql.connector
@@ -19,15 +19,147 @@ banco = mysql.connector.connect(
     database="estoque_produtos"
 )
 
+
+
 #============================================================================================
 
-def venderProdutos():
-    print("funcionando")
-    linha1 = vendas.cpCodigoVenda.text()
-    print(linha1)
+def pesquisar_produto():
+    
+    cursor = banco.cursor() 
+ 
+    if vendas.rbProdutoVenda.isChecked():
+        
+        try:
+        
+            item = vendas.cpPesquisaVenda.text()
+            
+            comando_SQL = "SELECT * FROM produtos WHERE produto LIKE '{}'".format(item)
+            
+            cursor.execute(comando_SQL)
+            
+            dados_lidos = cursor.fetchall()
+
+            
+
+            vendas.lbItemVenda.setText(dados_lidos[0][1])
+
+        except IndexError:
+
+            
+            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            
+  
+  
+    else:
+
+        try:
+            item = vendas.cpPesquisaVenda.text()
+
+            comando_SQL = "SELECT * FROM produtos WHERE codigo = {}".format(item)
+            cursor.execute(comando_SQL)
+            dados_lidos = cursor.fetchall()
+        
+            
+            vendas.lbItemVenda.setText(dados_lidos[0][1])
 
 
+        except IndexError:
 
+            
+            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+    
+
+    return dados_lidos
+ 
+def adicionar_item():
+
+    lista = pesquisar_produto()
+
+    
+
+    if lista:
+        linha1 = lista[0][0]
+        linha2 = lista[0][1]
+        
+        qtde = vendas.cpQuantidadeVenda.text()
+        if vendas.cpQuantidadeVenda.text() == '':
+            qtde = 1
+            linha3 = qtde
+            
+        
+        else:
+        
+            
+            linha3 = qtde
+
+
+        linha4 = lista[0][5]
+
+        soma = round((float(qtde) * linha4),2)
+        linha5 = soma
+
+        
+        cursor = banco.cursor()
+        comando_SQL = "INSERT INTO vendasUnitarias(codigo,item,quantidade,preco_unitario, total) VALUES(%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+
+
+        vendas.tableWidget_2.setRowCount(len(lista))
+        vendas.tableWidget_2.setColumnCount(6)
+        
+
+        
+                
+    else:
+        print('erro')
+
+
+    cursor = banco.cursor()
+    comando_SQL = "SELECT * FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    for i in range(0, len(dados_lidos)):
+        for j in range(0, 6):
+            vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+
+    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    resultado = cursor.fetchall()
+    print(resultado)
+
+    vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
+
+    vendas.lbItemVenda.setText('')
+    vendas.cpQuantidadeVenda.setText('')
+    vendas.cpPesquisaVenda.text('')
+
+
+def cancelar_compra():
+    cursor = banco.cursor()
+    comando_SQL = "DELETE FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+    print(dados_lidos)
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    vendas.lbPrecoTotalVenda.setText('0,00')
+
+
+def retirar_item():
+    pass
+
+def pagamento():
+    pass
+
+#===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
 
     linha1 = vendas.cpCodigoCadastro.text()
@@ -51,6 +183,11 @@ def cadastrarProduto():
     vendas.cpPrecoCadastro.setText("")
 
 
+
+
+
+
+#===========================PAGINA ESTOQUE ====================================================
 def consultarEstoque():
 
     cursor = banco.cursor()    
@@ -263,20 +400,27 @@ def fechar_app():
 
 #===============================botoes ===================================================================
 
-vendas.btBuscarProdutoVenda.clicked.connect(venderProdutos)
+#BOTOES VENDAS
+vendas.btBuscarProdutoVenda.clicked.connect(pesquisar_produto)
+vendas.btAdicionarVenda.clicked.connect(adicionar_item)
+vendas.btCancelarCompraVenda.clicked.connect(cancelar_compra)
+#vendas.btRetirarItemVenda.clicked.connect(venderProdutos)
+#vendas.btPagarVenda.clicked.connect(venderProdutos)
 
-
+#BOTOES CADASTRO
 vendas.btCadastrarCadastro.clicked.connect(cadastrarProduto)
 
-
+#BOTOES ESTOQUE
 vendas.btPesquisarEstoque.clicked.connect(consultarEstoque)
 vendas.btEditarEstoque.clicked.connect(editar_dados)
 vendas.btExcluirEstoque.clicked.connect(excluir_dados)
 vendas.btPDF.clicked.connect(gerar_pdf)
 
+#BOTAO TELA EDITAR
 tela_editar.btSalvarEditar.clicked.connect(salvar_valor_editado)
 
 
+#FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)
 
 
