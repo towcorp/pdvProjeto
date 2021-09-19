@@ -2,6 +2,7 @@ from re import template
 from PyQt5 import  uic,QtWidgets,QtGui
 from PyQt5.QtCore import dec
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
+from datetime import date
 
 import mysql.connector
 from reportlab.pdfgen import canvas
@@ -110,7 +111,7 @@ def adicionar_item():
 
         linha4 = lista[0][5]
 
-        soma = round((float(qtde) * linha4), 2)
+        soma = round((float(qtde) * float(linha4)), 2)
         linha5 = round(soma, 2)
 
         
@@ -170,6 +171,9 @@ def cancelar_compra():
 
     vendas.lbPrecoTotalVenda.setText('0,00')
     
+
+
+
     msgBox = QMessageBox()
     msgBox.setIcon(QMessageBox.Critical)
     msgBox.setWindowTitle('COMPRA CANCELADA')
@@ -218,25 +222,28 @@ def pagamento():
     if vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO CREDITO' :
 
         tela_recibo.lbFormaPagar.setText('CARTAO CREDITO')
+        forma_pagamento = 'CARTAO CREDITO'
 
     elif vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO DEBITO' :
         
         tela_recibo.lbFormaPagar.setText('CARTAO DEBITO')
+        forma_pagamento = 'CARTAO DEBITO'
 
     else:
 
         tela_recibo.lbFormaPagar.setText('DINHEIRO')
+        forma_pagamento = 'DINHEIRO'
 
 
+#----------------------------------------------------------------
     cursor = banco.cursor()
+#---------------------------------------------------------------------
+    # parte visual da tela
     comando_SQL = "SELECT item,quantidade,total FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
-    
-
     tela_recibo.show()
-
 
     tela_recibo.tableWidget_3.setRowCount(len(dados_lidos))
     tela_recibo.tableWidget_3.setColumnCount(3)
@@ -245,7 +252,6 @@ def pagamento():
         for j in range(0, 3):
            tela_recibo.tableWidget_3.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j]))) 
 
-
     
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
 
@@ -253,6 +259,59 @@ def pagamento():
     resultado = cursor.fetchall()
     
     tela_recibo.totalRecibo.setText(str(resultado[0][0]))
+#----------------------------------------------------------------------------
+    comando_SQL = "SELECT max(fatura_id) FROM Vendas_totais  "
+    cursor.execute(comando_SQL)
+    ultimo_id = cursor.fetchall()
+    print(ultimo_id)
+
+    try:
+        faturaID = str(ultimo_id[0][0]+1)
+    except:
+
+        faturaID = 1
+
+
+    print(faturaID)
+    dataPagamento = date.today()
+
+
+    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data,venda_total,forma_pagamento) VALUES(%s,%s,%s,%s)" 
+    dados = (str(faturaID),str(dataPagamento),str(resultado[0][0]),str(forma_pagamento))
+    cursor.execute(comando_SQL,dados)
+    banco.commit()
+    totaisVendidos = cursor.fetchall()
+
+
+
+
+    # salvando dados no banco
+    comando_SQL = "SELECT * FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    vendas_lidas = cursor.fetchall()
+
+
+
+    for linha in vendas_lidas:
+
+        print(linha)
+        linha1 = faturaID
+        linha2 = linha[1]
+        linha3 = linha[2]
+        linha4 = linha[3]
+        linha5 = linha[4]
+        linha6 = linha[5]
+        linha7 = dataPagamento
+        
+        
+        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(%s,%s,%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6),str(linha7))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+
+
+
+        
 
 def atualizar_tela_vendas():
     vendas.show()
@@ -358,8 +417,8 @@ def cadastrarProduto():
     try:
 
         linha1 = vendas.cpCodigoCadastro.text()
-        linha2 = vendas.cpProdutoCadastro.text()
-        linha3 = vendas.cpCategoriaCadastro.text()
+        linha2 = vendas.cpProdutoCadastro.text().upper()
+        linha3 = vendas.cpCategoriaCadastro.text().upper()
         linha4 = vendas.cpEstoqueMinimoCadastro.text()
         linha5 = vendas.cpQuantidadeCadastro.text()
         linha6 = vendas.cpPrecoCadastro.text()
