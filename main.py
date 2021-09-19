@@ -49,7 +49,13 @@ def pesquisar_produto():
         except IndexError:
 
             
-            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowTitle('VALOR INVALIDO')
+            msgBox.setText("PRODUTO NÃO CADASTRADO!")
+            msgBox.open()
+            msgBox.exec_()
+            vendas.cpPesquisaVenda.setText('')
             
   
   
@@ -66,10 +72,17 @@ def pesquisar_produto():
             vendas.lbItemVenda.setText(dados_lidos[0][1])
 
 
-        except IndexError:
+        except:
 
+            # CAIXA DE MENSAGEM E CLEAR CAMPO DE BUSCA
             
-            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowTitle('VALOR INVALIDO')
+            msgBox.setText("PRODUTO NÃO CADASTRADO!")
+            msgBox.open()
+            msgBox.exec_()
+            vendas.cpPesquisaVenda.setText('')
     
     return dados_lidos
  
@@ -157,6 +170,12 @@ def cancelar_compra():
 
     vendas.lbPrecoTotalVenda.setText('0,00')
     
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Critical)
+    msgBox.setWindowTitle('COMPRA CANCELADA')
+    msgBox.setText("SUA COMPRA FOI CANCELADA")
+    msgBox.open()
+    msgBox.exec_()
 
 def retirar_item():
 
@@ -298,13 +317,35 @@ def imprimir_recibo():
     pdf.save()
     #print("PDF FOI GERADO COM SUCESSO!")
     msgBox = QMessageBox()
+    
+    msgBox.setIcon(QMessageBox.Information)
+
+    msgBox.setWindowTitle('SUCESSO!')
     msgBox.setText("PDF FOI GERADO COM SUCESSO!")
     msgBox.open()
     msgBox.exec_()
     
 
 def fechar_recibo():
-    cancelar_compra()
+
+    cursor = banco.cursor()
+    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    vendas.lbPrecoTotalVenda.setText('0,00')
+
+    '''
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setWindowTitle('SUCESSO')
+    msgBox.setText("OBRIGADO PELA COMPRA")
+    msgBox.open()
+    msgBox.exec_()
+    '''
     tela_recibo.close()
 
 
@@ -314,30 +355,50 @@ def fechar_recibo():
 #===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
 
-    linha1 = vendas.cpCodigoCadastro.text()
-    linha2 = vendas.cpProdutoCadastro.text()
-    linha3 = vendas.cpCategoriaCadastro.text()
-    linha4 = vendas.cpEstoqueMinimoCadastro.text()
-    linha5 = vendas.cpQuantidadeCadastro.text()
-    linha6 = vendas.cpPrecoCadastro.text()
-    
-    cursor = banco.cursor()
-    comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(%s,%s,%s,%s,%s,%s)" 
-    dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
-    cursor.execute(comando_SQL,dados)
-    banco.commit()
-    
-    vendas.cpCodigoCadastro.setText("")
-    vendas.cpProdutoCadastro.setText("")
-    vendas.cpCategoriaCadastro.setText("")
-    vendas.cpEstoqueMinimoCadastro.setText("")
-    vendas.cpQuantidadeCadastro.setText("")
-    vendas.cpPrecoCadastro.setText("")
+    try:
+
+        linha1 = vendas.cpCodigoCadastro.text()
+        linha2 = vendas.cpProdutoCadastro.text()
+        linha3 = vendas.cpCategoriaCadastro.text()
+        linha4 = vendas.cpEstoqueMinimoCadastro.text()
+        linha5 = vendas.cpQuantidadeCadastro.text()
+        linha6 = vendas.cpPrecoCadastro.text()
+        
+        cursor = banco.cursor()
+        comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(%s,%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+        
+        vendas.cpCodigoCadastro.setText("")
+        vendas.cpProdutoCadastro.setText("")
+        vendas.cpCategoriaCadastro.setText("")
+        vendas.cpEstoqueMinimoCadastro.setText("")
+        vendas.cpQuantidadeCadastro.setText("")
+        vendas.cpPrecoCadastro.setText("")
 
 
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('SUCESSO!')
+        msgBox.setText("PRODUTO CADASTRADO COM SUCESSO!")
+        msgBox.open()
+        msgBox.exec_()
 
 
+    except:
 
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Warning)
+        msgBox.setWindowTitle('VALOR INVALIDO ')
+        msgBox.setText('''      
+        - - VERIFIQUE OS CAMPOS - 
+
+CODIGO - Deve ser numerico e unico para cada produto.
+QUANTIDADE - Deve ser um numero Inteiro.
+ESTOQUE MINIMO - Deve ser um numero Inteiro.
+PRECO - Deve ser numerico, use "." para separar.''')
+        msgBox.open()
+        msgBox.exec_()
 
 #===========================PAGINA ESTOQUE ====================================================
 def consultarEstoque():
@@ -544,7 +605,11 @@ def gerar_pdf():
 
     pdf.save()
     #print("PDF FOI GERADO COM SUCESSO!")
+    
     msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setWindowTitle('SUCESSO')
+    
     msgBox.setText("PDF FOI GERADO COM SUCESSO!")
     msgBox.open()
     msgBox.exec_()
