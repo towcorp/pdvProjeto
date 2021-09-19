@@ -196,6 +196,19 @@ def pagamento():
 
     tela_recibo.show()
 
+    if vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO CREDITO' :
+
+        tela_recibo.lbFormaPagar.setText('CARTAO CREDITO')
+
+    elif vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO DEBITO' :
+        
+        tela_recibo.lbFormaPagar.setText('CARTAO DEBITO')
+
+    else:
+
+        tela_recibo.lbFormaPagar.setText('DINHEIRO')
+
+
     cursor = banco.cursor()
     comando_SQL = "SELECT item,quantidade,total FROM vendasUnitarias"
     cursor.execute(comando_SQL)
