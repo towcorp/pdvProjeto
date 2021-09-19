@@ -1,4 +1,6 @@
+from re import template
 from PyQt5 import  uic,QtWidgets,QtGui
+from PyQt5.QtCore import dec
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
 
 import mysql.connector
@@ -7,6 +9,7 @@ from reportlab.pdfgen import canvas
 app=QtWidgets.QApplication([])
 vendas=uic.loadUi("vendas.ui")
 tela_editar=uic.loadUi('menu_editar.ui')
+tela_recibo=uic.loadUi('recibo.ui')
 vendas.vendas = QTabWidget()
 
 #=========================CONECTAR BANCO DE DADOS============================================
@@ -21,7 +24,7 @@ banco = mysql.connector.connect(
 
 
 
-#============================================================================================
+#=========================PAGINA VENDAS ======================================================
 
 def pesquisar_produto():
     
@@ -68,7 +71,6 @@ def pesquisar_produto():
             
             vendas.lbItemVenda.setText('NÃO ENCONTADO')
     
-
     return dados_lidos
  
 def adicionar_item():
@@ -95,8 +97,8 @@ def adicionar_item():
 
         linha4 = lista[0][5]
 
-        soma = round((float(qtde) * linha4),2)
-        linha5 = soma
+        soma = round((float(qtde) * linha4), 2)
+        linha5 = round(soma, 2)
 
         
         cursor = banco.cursor()
@@ -130,16 +132,19 @@ def adicionar_item():
 
     
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+
     cursor.execute(comando_SQL)
     resultado = cursor.fetchall()
-    print(resultado)
-
+    
     vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
 
     vendas.lbItemVenda.setText('')
     vendas.cpQuantidadeVenda.setText('')
-    vendas.cpPesquisaVenda.text('')
+    vendas.cpPesquisaVenda.setText('')
     atualizar_tela_vendas()
+
+
+
 
 def cancelar_compra():
     cursor = banco.cursor()
@@ -163,8 +168,8 @@ def retirar_item():
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
        
-    print(linha)
-    print(dados_lidos)
+    
+    
     #vendas.tableWidget_2.setRowCount(len(dados_lidos))
     #vendas.tableWidget_2.setColumnCount(6)    
    
@@ -188,8 +193,34 @@ def retirar_item():
     atualizar_tela_vendas()
 
 def pagamento():
-    pass
 
+    tela_recibo.show()
+
+    cursor = banco.cursor()
+    comando_SQL = "SELECT item,quantidade,total FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    
+
+    tela_recibo.show()
+
+
+    tela_recibo.tableWidget_3.setRowCount(len(dados_lidos))
+    tela_recibo.tableWidget_3.setColumnCount(3)
+
+    for i in range(0, len(dados_lidos)):
+        for j in range(0, 3):
+           tela_recibo.tableWidget_3.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j]))) 
+
+
+    
+    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+
+    cursor.execute(comando_SQL)
+    resultado = cursor.fetchall()
+    
+    tela_recibo.totalRecibo.setText(str(resultado[0][0]))
 
 def atualizar_tela_vendas():
     vendas.show()
@@ -205,6 +236,66 @@ def atualizar_tela_vendas():
     for i in range(0, len(dados_lidos)):
         for j in range(0, 5):
            vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j]))) 
+
+#---------------------RECIBO ---------------------------------------------------------------
+def imprimir_recibo():
+
+    cursor = banco.cursor()
+
+    comando_SQL = "SELECT item,quantidade,total FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+       
+    vendas.tableWidget.setRowCount(len(dados_lidos))
+    vendas.tableWidget.setColumnCount(3)    
+
+    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
+
+    cursor.execute(comando_SQL)
+    resultado = cursor.fetchall()
+    tela_recibo.totalRecibo.setText(str(resultado[0][0]))
+
+    
+    y = 0
+    pdf = canvas.Canvas("RECIBO.pdf")
+    pdf.setFont("Times-Bold", 16)
+    pdf.drawString(110,800, "RECIBO:")
+    pdf.setFont("Times-Bold", 12)
+
+    pdf.drawString(10,750, "PRODUTO")
+    pdf.drawString(110,750, "QUANTIDADE")
+    pdf.drawString(210,750, "PREÇO TOTAL")
+ 
+    pdf.setFont("Times-Bold", 10)
+    for i in range(0, len(dados_lidos)):
+        y = y + 50
+        pdf.drawString(10,750 - y, str(dados_lidos[i][0]))
+        pdf.drawString(110,750 - y, str(dados_lidos[i][1]))
+        pdf.drawString(210,750 - y, str(dados_lidos[i][2]))
+        
+    
+    pdf.drawString(10,750 - (y+50), '---------------------')    
+    pdf.drawString(110,750 - (y+50), '--------------------') 
+    pdf.drawString(210,750 - (y+50), '--------------------') 
+
+    pdf.setFont("Times-Bold", 12)
+    pdf.drawString(110,750 - (y+100), 'TOTAL :   ')    
+    pdf.drawString(210,750 - (y+100), str(tela_recibo.totalRecibo.text()))
+
+    pdf.save()
+    #print("PDF FOI GERADO COM SUCESSO!")
+    msgBox = QMessageBox()
+    msgBox.setText("PDF FOI GERADO COM SUCESSO!")
+    msgBox.open()
+    msgBox.exec_()
+    
+
+def fechar_recibo():
+    cancelar_compra()
+    tela_recibo.close()
+
+
+
 
 
 #===========================PAGINA CADASTRO =================================================
@@ -417,7 +508,7 @@ def gerar_pdf():
     y = 0
     pdf = canvas.Canvas("Produtos_Cadastrados.pdf")
     pdf.setFont("Times-Bold", 14)
-    pdf.drawString(200,800, "Produtos cadastrados:")
+    #pdf.drawString(200,800, "Produtos cadastrados:")
     pdf.setFont("Times-Bold", 10)
 
     pdf.drawString(10,750, "CODIGO")
@@ -446,6 +537,7 @@ def gerar_pdf():
     msgBox.exec_()
     
 def fechar_app():
+
     vendas.close()
 
 #===============================botoes ===================================================================
@@ -455,7 +547,7 @@ vendas.btBuscarProdutoVenda.clicked.connect(pesquisar_produto)
 vendas.btAdicionarVenda.clicked.connect(adicionar_item)
 vendas.btCancelarCompraVenda.clicked.connect(cancelar_compra)
 vendas.btRetirarItemVenda.clicked.connect(retirar_item)
-#vendas.btPagarVenda.clicked.connect(venderProdutos)
+vendas.btPagarVenda.clicked.connect(pagamento)
 
 #BOTOES CADASTRO
 vendas.btCadastrarCadastro.clicked.connect(cadastrarProduto)
@@ -469,6 +561,9 @@ vendas.btPDF.clicked.connect(gerar_pdf)
 #BOTAO TELA EDITAR
 tela_editar.btSalvarEditar.clicked.connect(salvar_valor_editado)
 
+#BOTAO RECIBO
+tela_recibo.btImprimirRecibo.clicked.connect(imprimir_recibo)
+tela_recibo.btFecharRecibo.clicked.connect(fechar_recibo)
 
 #FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)

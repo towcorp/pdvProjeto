@@ -25,16 +25,13 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vendasUnitarias`
+-- Table structure for table `Vendas_totais`
 --
 
-CREATE TABLE `vendasUnitarias` (
-  `id` int NOT NULL,
-  `codigo` int NOT NULL,
-  `item` varchar(30) NOT NULL,
-  `quantidade` int NOT NULL,
-  `preco_unitario` decimal(10,2) NOT NULL,
-  `total` decimal(10,2) NOT NULL
+CREATE TABLE `Vendas_totais` (
+  `fatura_id` int NOT NULL,
+  `venda_total` float(10,2) NOT NULL,
+  `data` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -42,20 +39,10 @@ CREATE TABLE `vendasUnitarias` (
 --
 
 --
--- Indexes for table `vendasUnitarias`
+-- Indexes for table `Vendas_totais`
 --
-ALTER TABLE `vendasUnitarias`
-  ADD UNIQUE KEY `id` (`id`) USING BTREE;
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `vendasUnitarias`
---
-ALTER TABLE `vendasUnitarias`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `Vendas_totais`
+  ADD UNIQUE KEY `fatura_id` (`fatura_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
