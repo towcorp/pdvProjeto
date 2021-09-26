@@ -2,6 +2,7 @@ from re import template
 from PyQt5 import  uic,QtWidgets,QtGui
 from PyQt5.QtCore import dec
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
+from datetime import date
 
 import mysql.connector
 from reportlab.pdfgen import canvas
@@ -49,7 +50,13 @@ def pesquisar_produto():
         except IndexError:
 
             
-            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowTitle('VALOR INVALIDO')
+            msgBox.setText("PRODUTO NÃO CADASTRADO!")
+            msgBox.open()
+            msgBox.exec_()
+            vendas.cpPesquisaVenda.setText('')
             
   
   
@@ -66,19 +73,26 @@ def pesquisar_produto():
             vendas.lbItemVenda.setText(dados_lidos[0][1])
 
 
-        except IndexError:
+        except:
 
+            # CAIXA DE MENSAGEM E CLEAR CAMPO DE BUSCA
             
-            vendas.lbItemVenda.setText('NÃO ENCONTADO')
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowTitle('VALOR INVALIDO')
+            msgBox.setText("PRODUTO NÃO CADASTRADO!")
+            msgBox.open()
+            msgBox.exec_()
+            vendas.cpPesquisaVenda.setText('')
     
     return dados_lidos
  
 def adicionar_item():
 
+    cursor = banco.cursor()
     lista = pesquisar_produto()
 
     
-
     if lista:
         linha1 = lista[0][0]
         linha2 = lista[0][1]
@@ -97,11 +111,38 @@ def adicionar_item():
 
         linha4 = lista[0][5]
 
-        soma = round((float(qtde) * linha4), 2)
+        soma = round((float(qtde) * float(linha4)), 2)
         linha5 = round(soma, 2)
 
         
-        cursor = banco.cursor()
+        
+ 
+    else:
+        print('erro')
+
+
+    comando_SQL = 'SELECT quantidade FROM produtos WHERE codigo="{}"'.format(str(linha1))
+    cursor.execute(comando_SQL)
+    consultaQtd = cursor.fetchall()
+
+    qtde = vendas.cpQuantidadeVenda.text()
+    qtdade = consultaQtd[0][0]
+
+    
+
+    
+    if int(qtdade) < int(qtde):
+        print('consulte quantidade no estoque')
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setWindowTitle('QUANTIDADE FORA DE ESTOQUE')
+        msgBox.setText(f'QUANTIDADE EM ESTOQUE: {str(qtdade)}')
+        msgBox.open()
+        msgBox.exec_()
+        
+    else:
+        print('OK')
+
         comando_SQL = "INSERT INTO vendasUnitarias(codigo,item,quantidade,preco_unitario, total) VALUES(%s,%s,%s,%s,%s)" 
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5))
         cursor.execute(comando_SQL,dados)
@@ -110,38 +151,35 @@ def adicionar_item():
 
         vendas.tableWidget_2.setRowCount(len(lista))
         vendas.tableWidget_2.setColumnCount(6)
-        
+
+
+
+
+
+        cursor = banco.cursor()
+        comando_SQL = "SELECT * FROM vendasUnitarias"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+
+        vendas.tableWidget_2.setRowCount(len(dados_lidos))
+        vendas.tableWidget_2.setColumnCount(6)  
+
+        for i in range(0, len(dados_lidos)):
+            for j in range(0, 6):
+                vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
 
         
-                
-    else:
-        print('erro')
+        comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
 
+        cursor.execute(comando_SQL)
+        resultado = cursor.fetchall()
+        
+        vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
 
-    cursor = banco.cursor()
-    comando_SQL = "SELECT * FROM vendasUnitarias"
-    cursor.execute(comando_SQL)
-    dados_lidos = cursor.fetchall()
-
-    vendas.tableWidget_2.setRowCount(len(dados_lidos))
-    vendas.tableWidget_2.setColumnCount(6)  
-
-    for i in range(0, len(dados_lidos)):
-        for j in range(0, 6):
-            vendas.tableWidget_2.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
-
-    
-    comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
-
-    cursor.execute(comando_SQL)
-    resultado = cursor.fetchall()
-    
-    vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
-
-    vendas.lbItemVenda.setText('')
-    vendas.cpQuantidadeVenda.setText('')
-    vendas.cpPesquisaVenda.setText('')
-    atualizar_tela_vendas()
+        vendas.lbItemVenda.setText('')
+        vendas.cpQuantidadeVenda.setText('')
+        vendas.cpPesquisaVenda.setText('')
+        atualizar_tela_vendas()
 
 
 
@@ -157,6 +195,15 @@ def cancelar_compra():
 
     vendas.lbPrecoTotalVenda.setText('0,00')
     
+
+
+
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Critical)
+    msgBox.setWindowTitle('COMPRA CANCELADA')
+    msgBox.setText("SUA COMPRA FOI CANCELADA")
+    msgBox.open()
+    msgBox.exec_()
 
 def retirar_item():
 
@@ -175,7 +222,7 @@ def retirar_item():
    
 
     valor_id = dados_lidos[linha][0]
-    print(valor_id)
+    
     comando_SQL = 'DELETE FROM vendasUnitarias WHERE id="{}"'.format(str(valor_id))
     cursor.execute(comando_SQL)
 
@@ -183,7 +230,7 @@ def retirar_item():
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     resultado = cursor.fetchall()
-    print(resultado)
+    
 
     vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
 
@@ -196,15 +243,31 @@ def pagamento():
 
     tela_recibo.show()
 
+    if vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO CREDITO' :
+
+        tela_recibo.lbFormaPagar.setText('CARTAO CREDITO')
+        forma_pagamento = 'CARTAO CREDITO'
+
+    elif vendas.cbFormaPagamentoVenda.currentText() == 'CARTAO DEBITO' :
+        
+        tela_recibo.lbFormaPagar.setText('CARTAO DEBITO')
+        forma_pagamento = 'CARTAO DEBITO'
+
+    else:
+
+        tela_recibo.lbFormaPagar.setText('DINHEIRO')
+        forma_pagamento = 'DINHEIRO'
+
+
+    #----------------------------------------------------------------
     cursor = banco.cursor()
+    #---------------------------------------------------------------------
+    # parte visual da tela
     comando_SQL = "SELECT item,quantidade,total FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
-    
-
     tela_recibo.show()
-
 
     tela_recibo.tableWidget_3.setRowCount(len(dados_lidos))
     tela_recibo.tableWidget_3.setColumnCount(3)
@@ -213,7 +276,6 @@ def pagamento():
         for j in range(0, 3):
            tela_recibo.tableWidget_3.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j]))) 
 
-
     
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
 
@@ -221,6 +283,70 @@ def pagamento():
     resultado = cursor.fetchall()
     
     tela_recibo.totalRecibo.setText(str(resultado[0][0]))
+    #----------------------------------------------------------------------------
+    comando_SQL = "SELECT max(fatura_id) FROM Vendas_totais  "
+    cursor.execute(comando_SQL)
+    ultimo_id = cursor.fetchall()
+
+
+    try:
+        faturaID = str(ultimo_id[0][0]+1)
+    except:
+
+        faturaID = 1
+
+
+    
+    dataPagamento = date.today()
+
+
+    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data,venda_total,forma_pagamento) VALUES(%s,%s,%s,%s)" 
+    dados = (str(faturaID),str(dataPagamento),str(resultado[0][0]),str(forma_pagamento))
+    cursor.execute(comando_SQL,dados)
+    banco.commit()
+    totaisVendidos = cursor.fetchall()
+
+
+
+
+    # salvando dados no banco
+    comando_SQL = "SELECT * FROM vendasUnitarias"
+    cursor.execute(comando_SQL)
+    vendas_lidas = cursor.fetchall()
+
+
+
+    for linha in vendas_lidas:
+
+        
+        linha1 = faturaID
+        linha2 = linha[1]
+        linha3 = linha[2]
+        linha4 = linha[3]
+        linha5 = linha[4]
+        linha6 = linha[5]
+        linha7 = dataPagamento
+        
+        
+        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(%s,%s,%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6),str(linha7))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+
+    # ATUALIZAR eSTOQUE
+        comando_SQL = 'SELECT quantidade FROM produtos WHERE codigo={}'.format(str(linha2))
+        cursor.execute(comando_SQL)
+        consultaQtd = cursor.fetchall()
+
+        qtde = linha4
+        qtdade = consultaQtd[0][0]
+  
+        qtdeNova = qtdade-qtde
+        comando_SQL = 'UPDATE produtos SET quantidade = {} WHERE codigo={}'.format(str(qtdeNova), str(linha2))
+        cursor.execute(comando_SQL)
+        #atualiza_estoque = cursor.fetchall()
+
+        
 
 def atualizar_tela_vendas():
     vendas.show()
@@ -285,13 +411,35 @@ def imprimir_recibo():
     pdf.save()
     #print("PDF FOI GERADO COM SUCESSO!")
     msgBox = QMessageBox()
+    
+    msgBox.setIcon(QMessageBox.Information)
+
+    msgBox.setWindowTitle('SUCESSO!')
     msgBox.setText("PDF FOI GERADO COM SUCESSO!")
     msgBox.open()
     msgBox.exec_()
     
 
 def fechar_recibo():
-    cancelar_compra()
+
+    cursor = banco.cursor()
+    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    cursor.execute(comando_SQL)
+    dados_lidos = cursor.fetchall()
+
+    vendas.tableWidget_2.setRowCount(len(dados_lidos))
+    vendas.tableWidget_2.setColumnCount(6)  
+
+    vendas.lbPrecoTotalVenda.setText('0,00')
+
+    '''
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setWindowTitle('SUCESSO')
+    msgBox.setText("OBRIGADO PELA COMPRA")
+    msgBox.open()
+    msgBox.exec_()
+    '''
     tela_recibo.close()
 
 
@@ -301,30 +449,50 @@ def fechar_recibo():
 #===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
 
-    linha1 = vendas.cpCodigoCadastro.text()
-    linha2 = vendas.cpProdutoCadastro.text()
-    linha3 = vendas.cpCategoriaCadastro.text()
-    linha4 = vendas.cpEstoqueMinimoCadastro.text()
-    linha5 = vendas.cpQuantidadeCadastro.text()
-    linha6 = vendas.cpPrecoCadastro.text()
-    
-    cursor = banco.cursor()
-    comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(%s,%s,%s,%s,%s,%s)" 
-    dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
-    cursor.execute(comando_SQL,dados)
-    banco.commit()
-    
-    vendas.cpCodigoCadastro.setText("")
-    vendas.cpProdutoCadastro.setText("")
-    vendas.cpCategoriaCadastro.setText("")
-    vendas.cpEstoqueMinimoCadastro.setText("")
-    vendas.cpQuantidadeCadastro.setText("")
-    vendas.cpPrecoCadastro.setText("")
+    try:
+
+        linha1 = vendas.cpCodigoCadastro.text()
+        linha2 = vendas.cpProdutoCadastro.text().upper()
+        linha3 = vendas.cpCategoriaCadastro.text().upper()
+        linha4 = vendas.cpEstoqueMinimoCadastro.text()
+        linha5 = vendas.cpQuantidadeCadastro.text()
+        linha6 = vendas.cpPrecoCadastro.text()
+        
+        cursor = banco.cursor()
+        comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(%s,%s,%s,%s,%s,%s)" 
+        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
+        cursor.execute(comando_SQL,dados)
+        banco.commit()
+        
+        vendas.cpCodigoCadastro.setText("")
+        vendas.cpProdutoCadastro.setText("")
+        vendas.cpCategoriaCadastro.setText("")
+        vendas.cpEstoqueMinimoCadastro.setText("")
+        vendas.cpQuantidadeCadastro.setText("")
+        vendas.cpPrecoCadastro.setText("")
 
 
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('SUCESSO!')
+        msgBox.setText("PRODUTO CADASTRADO COM SUCESSO!")
+        msgBox.open()
+        msgBox.exec_()
 
 
+    except:
 
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Warning)
+        msgBox.setWindowTitle('VALOR INVALIDO ')
+        msgBox.setText('''      
+        - - VERIFIQUE OS CAMPOS - 
+
+    CODIGO - Deve ser numerico e unico para cada produto.
+    QUANTIDADE - Deve ser um numero Inteiro.
+    ESTOQUE MINIMO - Deve ser um numero Inteiro.
+    PRECO - Deve ser numerico, use "." para separar.''')
+        msgBox.open()
+        msgBox.exec_()
 
 #===========================PAGINA ESTOQUE ====================================================
 def consultarEstoque():
@@ -531,7 +699,11 @@ def gerar_pdf():
 
     pdf.save()
     #print("PDF FOI GERADO COM SUCESSO!")
+    
     msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setWindowTitle('SUCESSO')
+    
     msgBox.setText("PDF FOI GERADO COM SUCESSO!")
     msgBox.open()
     msgBox.exec_()
