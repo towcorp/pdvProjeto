@@ -3,9 +3,14 @@ from PyQt5 import  uic,QtWidgets,QtGui
 from PyQt5.QtCore import dec
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
 from datetime import date
+import sqlite3
+from sqlite3 import Error
+
 
 import mysql.connector
 from reportlab.pdfgen import canvas
+
+
 
 app=QtWidgets.QApplication([])
 vendas=uic.loadUi("vendas.ui")
@@ -16,12 +21,22 @@ vendas.vendas = QTabWidget()
 #=========================CONECTAR BANCO DE DADOS============================================
 numero_id = 0
 
+
+
+'''
 banco = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="123",
     database="estoque_produtos"
 )
+'''
+
+bd = 'estoque_produtos.db'
+
+banco = sqlite3.connect(bd)
+
+
 
 
 
@@ -91,7 +106,7 @@ def adicionar_item():
 
     cursor = banco.cursor()
     lista = pesquisar_produto()
-
+    
     
     if lista:
         linha1 = lista[0][0]
@@ -143,9 +158,9 @@ def adicionar_item():
     else:
         print('OK')
 
-        comando_SQL = "INSERT INTO vendasUnitarias(codigo,item,quantidade,preco_unitario, total) VALUES(%s,%s,%s,%s,%s)" 
+        comando_SQL = "INSERT INTO vendasUnitarias (codigo, item, quantidade, preco_unitario, total) VALUES(?,?,?,?,?)"
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5))
-        cursor.execute(comando_SQL,dados)
+        cursor.execute(comando_SQL, dados)
         banco.commit()
 
 
@@ -186,7 +201,7 @@ def adicionar_item():
 
 def cancelar_compra():
     cursor = banco.cursor()
-    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    comando_SQL = "DELETE FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
@@ -300,7 +315,7 @@ def pagamento():
     dataPagamento = date.today()
 
 
-    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data,venda_total,forma_pagamento) VALUES(%s,%s,%s,%s)" 
+    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data, venda_total, forma_pagamento) VALUES(?,?,?,?)" 
     dados = (str(faturaID),str(dataPagamento),str(resultado[0][0]),str(forma_pagamento))
     cursor.execute(comando_SQL,dados)
     banco.commit()
@@ -328,7 +343,7 @@ def pagamento():
         linha7 = dataPagamento
         
         
-        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(%s,%s,%s,%s,%s,%s,%s)" 
+        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(?,?,?,?,?,?,?)" 
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6),str(linha7))
         cursor.execute(comando_SQL,dados)
         banco.commit()
@@ -423,7 +438,7 @@ def imprimir_recibo():
 def fechar_recibo():
 
     cursor = banco.cursor()
-    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    comando_SQL = "DELETE FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
