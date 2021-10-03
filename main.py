@@ -3,14 +3,12 @@ from PyQt5 import uic,QtWidgets,QtGui
 from PyQt5.QtCore import dec,QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox, QCheckBox
 from datetime import date
+import mysql.connector
+from reportlab.pdfgen import canvas
 import sqlite3
 from sqlite3 import Error
 
-
-import mysql.connector
-from reportlab.pdfgen import canvas
-
-
+# carregar telas criadas no QtPy5
 
 app=QtWidgets.QApplication([])
 vendas=uic.loadUi("vendas.ui")
@@ -18,12 +16,13 @@ tela_editar=uic.loadUi('menu_editar.ui')
 tela_recibo=uic.loadUi('recibo.ui')
 vendas.vendas = QTabWidget()
 now = QDate.currentDate()
-#vendas.dateAte.setDate(now)
+
 #=========================CONECTAR BANCO DE DADOS============================================
 numero_id = 0
 
+# Conectar usando phpMyAdmin
 
-
+# 
 '''
 banco = mysql.connector.connect(
     host="localhost",
@@ -32,13 +31,24 @@ banco = mysql.connector.connect(
     database="estoque_produtos"
 )
 '''
+# conectar usando SQLite3
+
+import sqlite3
+from sqlite3 import Error
 
 bd = 'estoque_produtos.db'
 
 banco = sqlite3.connect(bd)
 
 
-
+# funcao de caixa de texto
+def mensagem_de_tela(janela, mensagem):
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setWindowTitle(janela)
+        msgBox.setText(mensagem)
+        msgBox.open()
+        msgBox.exec_()
 
 
 #=========================PAGINA VENDAS ======================================================
@@ -65,16 +75,8 @@ def pesquisar_produto():
 
         except IndexError:
 
-            
-            msgBox = QMessageBox()
-            msgBox.setIcon(QMessageBox.Warning)
-            msgBox.setWindowTitle('VALOR INVALIDO')
-            msgBox.setText("PRODUTO NÃO CADASTRADO!")
-            msgBox.open()
-            msgBox.exec_()
+            mensagem_de_tela('VALOR INVALIDO', "PRODUTO NÃO CADASTRADO!")
             vendas.cpPesquisaVenda.setText('')
-            
-  
   
     else:
 
@@ -92,13 +94,8 @@ def pesquisar_produto():
         except:
 
             # CAIXA DE MENSAGEM E CLEAR CAMPO DE BUSCA
-            
-            msgBox = QMessageBox()
-            msgBox.setIcon(QMessageBox.Warning)
-            msgBox.setWindowTitle('VALOR INVALIDO')
-            msgBox.setText("PRODUTO NÃO CADASTRADO!")
-            msgBox.open()
-            msgBox.exec_()
+            mensagem_de_tela('VALOR INVALIDO', "PRODUTO NÃO CADASTRADO!")
+ 
             vendas.cpPesquisaVenda.setText('')
     
     return dados_lidos
@@ -108,7 +105,6 @@ def adicionar_item():
     cursor = banco.cursor()
     lista = pesquisar_produto()
     
-    
     if lista:
         linha1 = lista[0][0]
         linha2 = lista[0][1]
@@ -117,21 +113,14 @@ def adicionar_item():
         if vendas.cpQuantidadeVenda.text() == '':
             qtde = 1
             linha3 = qtde
-            
         
         else:
-        
-            
             linha3 = qtde
-
 
         linha4 = lista[0][5]
 
         soma = round((float(qtde) * float(linha4)), 2)
         linha5 = round(soma, 2)
-
-        
-        
  
     else:
         print('erro')
@@ -143,12 +132,8 @@ def adicionar_item():
 
     qtde = vendas.cpQuantidadeVenda.text()
     qtdade = consultaQtd[0][0]
-
-    
-
     
     if int(qtdade) < int(qtde):
-        print('consulte quantidade no estoque')
         msgBox = QMessageBox()
         msgBox.setIcon(QMessageBox.Critical)
         msgBox.setWindowTitle('QUANTIDADE FORA DE ESTOQUE')
@@ -164,13 +149,8 @@ def adicionar_item():
         cursor.execute(comando_SQL, dados)
         banco.commit()
 
-
         vendas.tableWidget_2.setRowCount(len(lista))
         vendas.tableWidget_2.setColumnCount(6)
-
-
-
-
 
         cursor = banco.cursor()
         comando_SQL = "SELECT * FROM vendasUnitarias"
@@ -198,8 +178,6 @@ def adicionar_item():
         atualizar_tela_vendas()
 
 
-
-
 def cancelar_compra():
     cursor = banco.cursor()
     comando_SQL = "DELETE FROM vendasUnitarias"
@@ -210,16 +188,8 @@ def cancelar_compra():
     vendas.tableWidget_2.setColumnCount(6)  
 
     vendas.lbPrecoTotalVenda.setText('0,00')
-    
-
-
-
-    msgBox = QMessageBox()
-    msgBox.setIcon(QMessageBox.Critical)
-    msgBox.setWindowTitle('COMPRA CANCELADA')
-    msgBox.setText("SUA COMPRA FOI CANCELADA")
-    msgBox.open()
-    msgBox.exec_()
+ 
+    mensagem_de_tela('COMPRA CANCELADA', "SUA COMPRA FOI CANCELADA")
 
 def retirar_item():
 
@@ -230,23 +200,15 @@ def retirar_item():
     comando_SQL = "SELECT id FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
-       
-    
-    
-    #vendas.tableWidget_2.setRowCount(len(dados_lidos))
-    #vendas.tableWidget_2.setColumnCount(6)    
    
-
     valor_id = dados_lidos[linha][0]
     
     comando_SQL = 'DELETE FROM vendasUnitarias WHERE id="{}"'.format(str(valor_id))
     cursor.execute(comando_SQL)
 
-
     comando_SQL = "SELECT sum(total) FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     resultado = cursor.fetchall()
-    
 
     vendas.lbPrecoTotalVenda.setText(str(resultado[0][0]))
 
@@ -273,7 +235,6 @@ def pagamento():
 
         tela_recibo.lbFormaPagar.setText('DINHEIRO')
         forma_pagamento = 'DINHEIRO'
-
 
     #----------------------------------------------------------------
     cursor = banco.cursor()
@@ -304,17 +265,13 @@ def pagamento():
     cursor.execute(comando_SQL)
     ultimo_id = cursor.fetchall()
 
-
     try:
         faturaID = str(ultimo_id[0][0]+1)
     except:
 
         faturaID = 1
 
-
-    
     dataPagamento = date.today()
-
 
     comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data, venda_total, forma_pagamento) VALUES(?,?,?,?)" 
     dados = (str(faturaID),str(dataPagamento),str(resultado[0][0]),str(forma_pagamento))
@@ -322,19 +279,13 @@ def pagamento():
     banco.commit()
     totaisVendidos = cursor.fetchall()
 
-
-
-
     # salvando dados no banco
     comando_SQL = "SELECT * FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     vendas_lidas = cursor.fetchall()
 
-
-
     for linha in vendas_lidas:
-
-        
+  
         linha1 = faturaID
         linha2 = linha[1]
         linha3 = linha[2]
@@ -342,8 +293,7 @@ def pagamento():
         linha5 = linha[4]
         linha6 = linha[5]
         linha7 = dataPagamento
-        
-        
+  
         comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(?,?,?,?,?,?,?)" 
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6),str(linha7))
         cursor.execute(comando_SQL,dados)
@@ -362,7 +312,6 @@ def pagamento():
         cursor.execute(comando_SQL)
         #atualiza_estoque = cursor.fetchall()
 
-        
 
 def atualizar_tela_vendas():
     vendas.show()
@@ -425,16 +374,8 @@ def imprimir_recibo():
     pdf.drawString(210,750 - (y+100), str(tela_recibo.totalRecibo.text()))
 
     pdf.save()
-    #print("PDF FOI GERADO COM SUCESSO!")
-    msgBox = QMessageBox()
-    
-    msgBox.setIcon(QMessageBox.Information)
 
-    msgBox.setWindowTitle('SUCESSO!')
-    msgBox.setText("PDF FOI GERADO COM SUCESSO!")
-    msgBox.open()
-    msgBox.exec_()
-    
+    mensagem_de_tela('SUCESSO!', "PDF FOI GERADO COM SUCESSO!")
 
 def fechar_recibo():
 
@@ -448,19 +389,8 @@ def fechar_recibo():
 
     vendas.lbPrecoTotalVenda.setText('0,00')
 
-    '''
-    msgBox = QMessageBox()
-    msgBox.setIcon(QMessageBox.Information)
-    msgBox.setWindowTitle('SUCESSO')
-    msgBox.setText("OBRIGADO PELA COMPRA")
-    msgBox.open()
-    msgBox.exec_()
-    '''
+
     tela_recibo.close()
-
-
-
-
 
 #===========================PAGINA CADASTRO =================================================
 def cadastrarProduto():
@@ -474,41 +404,35 @@ def cadastrarProduto():
         linha5 = vendas.cpQuantidadeCadastro.text()
         linha6 = vendas.cpPrecoCadastro.text()
         
-        cursor = banco.cursor()
-        comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(%s,%s,%s,%s,%s,%s)" 
-        dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
-        cursor.execute(comando_SQL,dados)
-        banco.commit()
-        
-        vendas.cpCodigoCadastro.setText("")
-        vendas.cpProdutoCadastro.setText("")
-        vendas.cpCategoriaCadastro.setText("")
-        vendas.cpEstoqueMinimoCadastro.setText("")
-        vendas.cpQuantidadeCadastro.setText("")
-        vendas.cpPrecoCadastro.setText("")
+        if linha1 and linha2 and linha3 and linha4 and linha5 and linha6:
 
+            cursor = banco.cursor()
+            comando_SQL = "INSERT INTO produtos (codigo,produto,categoria,estoque_minimo,quantidade,preco) VALUES(?,?,?,?,?,?)" 
+            dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6))
+            cursor.execute(comando_SQL,dados)
+            banco.commit()
+            
+            vendas.cpCodigoCadastro.setText("")
+            vendas.cpProdutoCadastro.setText("")
+            vendas.cpCategoriaCadastro.setText("")
+            vendas.cpEstoqueMinimoCadastro.setText("")
+            vendas.cpQuantidadeCadastro.setText("")
+            vendas.cpPrecoCadastro.setText("")
 
-        msgBox = QMessageBox()
-        msgBox.setWindowTitle('SUCESSO!')
-        msgBox.setText("PRODUTO CADASTRADO COM SUCESSO!")
-        msgBox.open()
-        msgBox.exec_()
+            mensagem_de_tela('SUCESSO!', "PRODUTO CADASTRADO COM SUCESSO!")
 
+        else:
+            mensagem_de_tela('Campo Vazio', 'Preencha os campos faltantes')
 
     except:
-
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Warning)
-        msgBox.setWindowTitle('VALOR INVALIDO ')
-        msgBox.setText('''      
+        mensagem_de_tela('VALOR INVALIDO', '''      
         - - VERIFIQUE OS CAMPOS - 
 
     CODIGO - Deve ser numerico e unico para cada produto.
     QUANTIDADE - Deve ser um numero Inteiro.
     ESTOQUE MINIMO - Deve ser um numero Inteiro.
     PRECO - Deve ser numerico, use "." para separar.''')
-        msgBox.open()
-        msgBox.exec_()
+
 
 #===========================PAGINA ESTOQUE ====================================================
 def consultarEstoque():
@@ -544,12 +468,9 @@ def consultarEstoque():
         vendas.tableWidget.setRowCount(len(dados_lidos))
         vendas.tableWidget.setColumnCount(6)    
 
-
-
     for i in range(0, len(dados_lidos)):
         for j in range(0, 6):
             vendas.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
-
 
 
 def atualizar_tela():
@@ -613,7 +534,6 @@ def salvar_valor_editado():
     atualizar_tela()
 
 
-
 def excluir_dados():
 
     cursor = banco.cursor()
@@ -646,13 +566,11 @@ def excluir_dados():
         cursor.execute(comando_SQL)
         dados_lidos = cursor.fetchall()
        
-
     vendas.tableWidget.setRowCount(len(dados_lidos))
     vendas.tableWidget.setColumnCount(6)    
 
     valor_id = dados_lidos[linha][0]
     cursor.execute("DELETE FROM produtos WHERE codigo="+ str(valor_id))
-
 
 
 def gerar_pdf():
@@ -713,16 +631,9 @@ def gerar_pdf():
         pdf.drawString(510,750 - y, str(dados_lidos[i][5]))
 
 
-    pdf.save()
-    #print("PDF FOI GERADO COM SUCESSO!")
-    
-    msgBox = QMessageBox()
-    msgBox.setIcon(QMessageBox.Information)
-    msgBox.setWindowTitle('SUCESSO')
-    
-    msgBox.setText("PDF FOI GERADO COM SUCESSO!")
-    msgBox.open()
-    msgBox.exec_()
+    pdf.save()    
+    mensagem_de_tela('SUCESSO', "PDF FOI GERADO COM SUCESSO!")
+
     
 def fechar_app():
 
@@ -733,19 +644,13 @@ def fechar_app():
 
 def pesquisaRelatorio():
     
-     
-
-
-
     cursor = banco.cursor()  
     now = QDate.currentDate()
     mesRelatorio = vendas.mesRelatorio.currentIndex()+1
     anoRelatorio = vendas.anoRelatorio.text()
     
     selectCampo = vendas.selectVenda.currentText() 
-     
 
-    
     if selectCampo == 'VENDAS POR ANO':
   
         vendas.tableWidget_3.show()
@@ -778,11 +683,6 @@ def pesquisaRelatorio():
             for j in range(0, 7):
                 vendas.tableWidget_4.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
 
-
-
-
-
-
 #===============================botoes ===================================================================
 
 #BOTOES VENDAS
@@ -814,23 +714,6 @@ vendas.btPesquisa.clicked.connect(pesquisaRelatorio)
 
 #FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #===============================RODAR APLICAÇÃO =============================================
 
