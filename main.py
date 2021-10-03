@@ -1,7 +1,7 @@
 from re import template
-from PyQt5 import  uic,QtWidgets,QtGui
-from PyQt5.QtCore import dec
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
+from PyQt5 import uic,QtWidgets,QtGui
+from PyQt5.QtCore import dec,QDate, QTime, QDateTime, Qt
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox, QCheckBox
 from datetime import date
 import sqlite3
 from sqlite3 import Error
@@ -17,7 +17,8 @@ vendas=uic.loadUi("vendas.ui")
 tela_editar=uic.loadUi('menu_editar.ui')
 tela_recibo=uic.loadUi('recibo.ui')
 vendas.vendas = QTabWidget()
-
+now = QDate.currentDate()
+#vendas.dateAte.setDate(now)
 #=========================CONECTAR BANCO DE DADOS============================================
 numero_id = 0
 
@@ -727,6 +728,61 @@ def fechar_app():
 
     vendas.close()
 
+
+#===========================PAGINA RELATORIO ====================================================
+
+def pesquisaRelatorio():
+    
+     
+
+
+
+    cursor = banco.cursor()  
+    now = QDate.currentDate()
+    mesRelatorio = vendas.mesRelatorio.currentIndex()+1
+    anoRelatorio = vendas.anoRelatorio.text()
+    
+    selectCampo = vendas.selectVenda.currentText() 
+     
+
+    
+    if selectCampo == 'VENDAS POR ANO':
+  
+        vendas.tableWidget_3.show()
+        vendas.tableWidget_4.hide()
+
+        comando_SQL = f"SELECT * FROM Vendas_totais WHERE CAST(SUBSTR(data, 1, 4) AS integer) = {anoRelatorio}"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+
+        vendas.tableWidget_3.setRowCount(len(dados_lidos))
+        vendas.tableWidget_3.setColumnCount(4)    
+
+        for i in range(0, len(dados_lidos)):
+            for j in range(0, 4):
+                vendas.tableWidget_3.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+    else:
+            
+        vendas.tableWidget_4.show()
+        vendas.tableWidget_3.hide()
+
+        comando_SQL = f"SELECT * FROM vendasGerais WHERE CAST(SUBSTR(data_compra, 1, 4) AS integer) = {anoRelatorio} AND CAST(SUBSTR(data_compra, 6, 7) AS integer) = {mesRelatorio} "
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+        
+        vendas.tableWidget_4.setRowCount(len(dados_lidos))
+        vendas.tableWidget_4.setColumnCount(7)    
+
+        for i in range(0, len(dados_lidos)):
+            for j in range(0, 7):
+                vendas.tableWidget_4.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+
+
+
+
+
 #===============================botoes ===================================================================
 
 #BOTOES VENDAS
@@ -751,6 +807,10 @@ tela_editar.btSalvarEditar.clicked.connect(salvar_valor_editado)
 #BOTAO RECIBO
 tela_recibo.btImprimirRecibo.clicked.connect(imprimir_recibo)
 tela_recibo.btFecharRecibo.clicked.connect(fechar_recibo)
+
+#BOTAO RELATORIO
+vendas.btPesquisa.clicked.connect(pesquisaRelatorio)
+
 
 #FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)

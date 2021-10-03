@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1084</width>
-    <height>723</height>
+    <width>1121</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,14 +27,17 @@ background-color: rgb(114, 159, 207);</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>1041</width>
+      <x>10</x>
+      <y>50</y>
+      <width>1101</width>
       <height>641</height>
      </rect>
     </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="vendas">
      <attribute name="title">
@@ -43,7 +46,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLineEdit" name="cpPesquisaVenda">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>90</y>
         <width>241</width>
         <height>51</height>
@@ -56,7 +59,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>70</x>
         <y>30</y>
         <width>121</width>
         <height>17</height>
@@ -72,7 +75,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QPushButton" name="btBuscarProdutoVenda">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>330</x>
         <y>90</y>
         <width>191</width>
         <height>51</height>
@@ -94,7 +97,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QPushButton" name="btAdicionarVenda">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>560</x>
         <y>180</y>
         <width>161</width>
         <height>71</height>
@@ -117,14 +120,14 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QFrame" name="frame_2">
       <property name="geometry">
        <rect>
-        <x>700</x>
+        <x>730</x>
         <y>120</y>
         <width>321</width>
         <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(186, 189, 182);</string>
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -132,50 +135,11 @@ background-color: rgb(114, 159, 207);</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="lbPrecoTotalVenda">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>301</width>
-         <height>81</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>40</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.00</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_9">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>41</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>25</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>R$</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>700</x>
+        <x>730</x>
         <y>100</y>
         <width>67</width>
         <height>17</height>
@@ -191,7 +155,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QPushButton" name="btRetirarItemVenda">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>230</x>
         <y>530</y>
         <width>161</width>
         <height>61</height>
@@ -213,7 +177,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QComboBox" name="cbFormaPagamentoVenda">
       <property name="geometry">
        <rect>
-        <x>600</x>
+        <x>630</x>
         <y>540</y>
         <width>241</width>
         <height>51</height>
@@ -241,7 +205,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>600</x>
+        <x>630</x>
         <y>520</y>
         <width>171</width>
         <height>16</height>
@@ -257,7 +221,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QPushButton" name="btCancelarCompraVenda">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>530</y>
         <width>161</width>
         <height>61</height>
@@ -279,7 +243,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QPushButton" name="btPagarVenda">
       <property name="geometry">
        <rect>
-        <x>850</x>
+        <x>880</x>
         <y>530</y>
         <width>161</width>
         <height>61</height>
@@ -301,7 +265,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLineEdit" name="cpQuantidadeVenda">
       <property name="geometry">
        <rect>
-        <x>270</x>
+        <x>300</x>
         <y>190</y>
         <width>241</width>
         <height>51</height>
@@ -314,7 +278,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>170</y>
         <width>151</width>
         <height>21</height>
@@ -330,7 +294,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>270</x>
+        <x>300</x>
         <y>170</y>
         <width>111</width>
         <height>21</height>
@@ -346,7 +310,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QRadioButton" name="rbCodigoVenda">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>200</x>
         <y>20</y>
         <width>191</width>
         <height>23</height>
@@ -371,7 +335,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QRadioButton" name="rbProdutoVenda">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>200</x>
         <y>40</y>
         <width>112</width>
         <height>23</height>
@@ -393,7 +357,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QLabel" name="lbItemVenda">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>190</y>
         <width>241</width>
         <height>51</height>
@@ -412,7 +376,7 @@ background-color: rgb(114, 159, 207);</string>
      <widget class="QTableWidget" name="tableWidget_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>50</x>
         <y>270</y>
         <width>1001</width>
         <height>231</height>
@@ -524,6 +488,51 @@ color: rgb(0, 0, 0);</string>
        </property>
       </column>
      </widget>
+     <widget class="QLabel" name="lbPrecoTotalVenda">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>150</y>
+        <width>301</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>40</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>0.00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>130</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>25</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>R$</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="cadastro">
      <attribute name="title">
@@ -532,8 +541,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>110</y>
+        <x>210</x>
+        <y>120</y>
         <width>67</width>
         <height>21</height>
        </rect>
@@ -548,8 +557,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>180</y>
+        <x>210</x>
+        <y>190</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -564,8 +573,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>110</y>
+        <x>610</x>
+        <y>120</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -580,8 +589,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>250</y>
+        <x>210</x>
+        <y>260</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -596,8 +605,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpCodigoCadastro">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>130</y>
+        <x>210</x>
+        <y>140</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -609,8 +618,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpProdutoCadastro">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>200</y>
+        <x>210</x>
+        <y>210</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -622,8 +631,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpQuantidadeCadastro">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>130</y>
+        <x>610</x>
+        <y>140</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -635,8 +644,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpPrecoCadastro">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>270</y>
+        <x>210</x>
+        <y>280</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -648,8 +657,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_12">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>250</y>
+        <x>610</x>
+        <y>260</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -664,8 +673,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QPushButton" name="btCadastrarCadastro">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>380</y>
+        <x>430</x>
+        <y>420</y>
         <width>241</width>
         <height>81</height>
        </rect>
@@ -677,8 +686,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>180</y>
+        <x>610</x>
+        <y>190</y>
         <width>151</width>
         <height>17</height>
        </rect>
@@ -693,8 +702,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpEstoqueMinimoCadastro">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>200</y>
+        <x>610</x>
+        <y>210</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -706,8 +715,8 @@ color: rgb(0, 0, 0);</string>
      <widget class="QLineEdit" name="cpCategoriaCadastro">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>270</y>
+        <x>610</x>
+        <y>280</y>
         <width>291</width>
         <height>41</height>
        </rect>
@@ -1019,11 +1028,599 @@ color: rgb(0, 0, 0);</string>
       </column>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>RELATORIO DE VENDA</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>1071</width>
+        <height>431</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="autoScrollMargin">
+       <number>20</number>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>264</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>fatura_id</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>data</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>forma_pagamento</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>venda_total</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+     </widget>
+     <widget class="QPushButton" name="btPesquisa">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>50</y>
+        <width>231</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(211, 215, 207);</string>
+      </property>
+      <property name="text">
+       <string>PESQUISAR</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="selectVenda">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>70</y>
+        <width>211</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(211, 215, 207);</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>VENDAS POR ANO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>VENDAS POR MES</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="mesRelatorio">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>70</y>
+        <width>211</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
+      <property name="statusTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string/>
+      </property>
+      <property name="accessibleName">
+       <string/>
+      </property>
+      <property name="accessibleDescription">
+       <string/>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(211, 215, 207);</string>
+      </property>
+      <property name="currentText">
+       <string>OUTUBRO</string>
+      </property>
+      <property name="currentIndex">
+       <number>9</number>
+      </property>
+      <property name="maxVisibleItems">
+       <number>10</number>
+      </property>
+      <property name="minimumContentsLength">
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>JANEIRO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>FEVEREIRO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MARCO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ABRIL</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MAIO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>JUNHO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>JULHO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>AGOSTO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>SETEMBRO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>OUTUBRO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>NOVEMBRO</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>DEZEMBRO</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QDateEdit" name="anoRelatorio">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>70</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(211, 215, 207);</string>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2021</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="minimumDate">
+       <date>
+        <year>1752</year>
+        <month>9</month>
+        <day>14</day>
+       </date>
+      </property>
+      <property name="currentSection">
+       <enum>QDateTimeEdit::YearSection</enum>
+      </property>
+      <property name="displayFormat">
+       <string>yyyy</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>false</bool>
+      </property>
+      <property name="currentSectionIndex">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>50</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(252, 233, 79);</string>
+      </property>
+      <property name="text">
+       <string>MES</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>50</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(252, 233, 79);</string>
+      </property>
+      <property name="text">
+       <string>ANO</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tableWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>1071</width>
+        <height>431</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>149</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>id_recibo</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>cod_produto</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>produto</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>quantidade</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>preco_unitario</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>preco_total</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>data_compra</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>136</red>
+         <green>138</green>
+         <blue>133</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>252</red>
+          <green>233</green>
+          <blue>79</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+     </widget>
+    </widget>
    </widget>
    <widget class="QPushButton" name="btFechar">
     <property name="geometry">
      <rect>
-      <x>920</x>
+      <x>950</x>
       <y>10</y>
       <width>141</width>
       <height>41</height>
@@ -1043,19 +1640,77 @@ color: rgb(243, 243, 243);</string>
      <string>FECHAR</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>-10</y>
+      <width>601</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 233, 79);
+selection-color: rgb(138, 226, 52);</string>
+    </property>
+    <property name="text">
+     <string>PROJETO INTEGRADO I - PDV</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1084</width>
+     <width>1121</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>cpCodigoCadastro</tabstop>
+  <tabstop>cpQuantidadeCadastro</tabstop>
+  <tabstop>cpProdutoCadastro</tabstop>
+  <tabstop>cpEstoqueMinimoCadastro</tabstop>
+  <tabstop>cpPrecoCadastro</tabstop>
+  <tabstop>cpCategoriaCadastro</tabstop>
+  <tabstop>btCadastrarCadastro</tabstop>
+  <tabstop>btPagarVenda</tabstop>
+  <tabstop>cpQuantidadeVenda</tabstop>
+  <tabstop>rbCodigoVenda</tabstop>
+  <tabstop>rbProdutoVenda</tabstop>
+  <tabstop>tableWidget_2</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>btBuscarProdutoVenda</tabstop>
+  <tabstop>cpPesquisaVenda</tabstop>
+  <tabstop>btRetirarItemVenda</tabstop>
+  <tabstop>btCancelarCompraVenda</tabstop>
+  <tabstop>btAdicionarVenda</tabstop>
+  <tabstop>cbFormaPagamentoVenda</tabstop>
+  <tabstop>btExcluirEstoque</tabstop>
+  <tabstop>btEditarEstoque</tabstop>
+  <tabstop>btPDF</tabstop>
+  <tabstop>btPesquisarEstoque</tabstop>
+  <tabstop>rbEstoqueMinimoEstoque</tabstop>
+  <tabstop>rbSemEstoqueEstoque</tabstop>
+  <tabstop>rbCategoriaEstoque</tabstop>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>btFechar</tabstop>
+  <tabstop>tableWidget_3</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
