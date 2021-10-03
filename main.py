@@ -1,27 +1,43 @@
 from re import template
-from PyQt5 import  uic,QtWidgets,QtGui
-from PyQt5.QtCore import dec
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox
+from PyQt5 import uic,QtWidgets,QtGui
+from PyQt5.QtCore import dec,QDate, QTime, QDateTime, Qt
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget,QVBoxLayout,QMessageBox, QCheckBox
 from datetime import date
+import sqlite3
+from sqlite3 import Error
+
 
 import mysql.connector
 from reportlab.pdfgen import canvas
+
+
 
 app=QtWidgets.QApplication([])
 vendas=uic.loadUi("vendas.ui")
 tela_editar=uic.loadUi('menu_editar.ui')
 tela_recibo=uic.loadUi('recibo.ui')
 vendas.vendas = QTabWidget()
-
+now = QDate.currentDate()
+#vendas.dateAte.setDate(now)
 #=========================CONECTAR BANCO DE DADOS============================================
 numero_id = 0
 
+
+
+'''
 banco = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="123",
     database="estoque_produtos"
 )
+'''
+
+bd = 'estoque_produtos.db'
+
+banco = sqlite3.connect(bd)
+
+
 
 
 
@@ -91,7 +107,7 @@ def adicionar_item():
 
     cursor = banco.cursor()
     lista = pesquisar_produto()
-
+    
     
     if lista:
         linha1 = lista[0][0]
@@ -143,9 +159,9 @@ def adicionar_item():
     else:
         print('OK')
 
-        comando_SQL = "INSERT INTO vendasUnitarias(codigo,item,quantidade,preco_unitario, total) VALUES(%s,%s,%s,%s,%s)" 
+        comando_SQL = "INSERT INTO vendasUnitarias (codigo, item, quantidade, preco_unitario, total) VALUES(?,?,?,?,?)"
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5))
-        cursor.execute(comando_SQL,dados)
+        cursor.execute(comando_SQL, dados)
         banco.commit()
 
 
@@ -186,7 +202,7 @@ def adicionar_item():
 
 def cancelar_compra():
     cursor = banco.cursor()
-    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    comando_SQL = "DELETE FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
@@ -300,7 +316,7 @@ def pagamento():
     dataPagamento = date.today()
 
 
-    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data,venda_total,forma_pagamento) VALUES(%s,%s,%s,%s)" 
+    comando_SQL = "INSERT INTO Vendas_totais (fatura_id, data, venda_total, forma_pagamento) VALUES(?,?,?,?)" 
     dados = (str(faturaID),str(dataPagamento),str(resultado[0][0]),str(forma_pagamento))
     cursor.execute(comando_SQL,dados)
     banco.commit()
@@ -328,7 +344,7 @@ def pagamento():
         linha7 = dataPagamento
         
         
-        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(%s,%s,%s,%s,%s,%s,%s)" 
+        comando_SQL = "INSERT INTO vendasGerais (id_recibo,cod_produto,produto,quantidade,preco_unitario,preco_total,data_compra) VALUES(?,?,?,?,?,?,?)" 
         dados = (str(linha1),str(linha2),str(linha3),str(linha4),str(linha5),str(linha6),str(linha7))
         cursor.execute(comando_SQL,dados)
         banco.commit()
@@ -423,7 +439,7 @@ def imprimir_recibo():
 def fechar_recibo():
 
     cursor = banco.cursor()
-    comando_SQL = "TRUNCATE TABLE vendasUnitarias"
+    comando_SQL = "DELETE FROM vendasUnitarias"
     cursor.execute(comando_SQL)
     dados_lidos = cursor.fetchall()
 
@@ -712,6 +728,61 @@ def fechar_app():
 
     vendas.close()
 
+
+#===========================PAGINA RELATORIO ====================================================
+
+def pesquisaRelatorio():
+    
+     
+
+
+
+    cursor = banco.cursor()  
+    now = QDate.currentDate()
+    mesRelatorio = vendas.mesRelatorio.currentIndex()+1
+    anoRelatorio = vendas.anoRelatorio.text()
+    
+    selectCampo = vendas.selectVenda.currentText() 
+     
+
+    
+    if selectCampo == 'VENDAS POR ANO':
+  
+        vendas.tableWidget_3.show()
+        vendas.tableWidget_4.hide()
+
+        comando_SQL = f"SELECT * FROM Vendas_totais WHERE CAST(SUBSTR(data, 1, 4) AS integer) = {anoRelatorio}"
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+
+        vendas.tableWidget_3.setRowCount(len(dados_lidos))
+        vendas.tableWidget_3.setColumnCount(4)    
+
+        for i in range(0, len(dados_lidos)):
+            for j in range(0, 4):
+                vendas.tableWidget_3.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+    else:
+            
+        vendas.tableWidget_4.show()
+        vendas.tableWidget_3.hide()
+
+        comando_SQL = f"SELECT * FROM vendasGerais WHERE CAST(SUBSTR(data_compra, 1, 4) AS integer) = {anoRelatorio} AND CAST(SUBSTR(data_compra, 6, 7) AS integer) = {mesRelatorio} "
+        cursor.execute(comando_SQL)
+        dados_lidos = cursor.fetchall()
+        
+        vendas.tableWidget_4.setRowCount(len(dados_lidos))
+        vendas.tableWidget_4.setColumnCount(7)    
+
+        for i in range(0, len(dados_lidos)):
+            for j in range(0, 7):
+                vendas.tableWidget_4.setItem(i,j,QtWidgets.QTableWidgetItem(str(dados_lidos[i][j])))
+
+
+
+
+
+
 #===============================botoes ===================================================================
 
 #BOTOES VENDAS
@@ -736,6 +807,10 @@ tela_editar.btSalvarEditar.clicked.connect(salvar_valor_editado)
 #BOTAO RECIBO
 tela_recibo.btImprimirRecibo.clicked.connect(imprimir_recibo)
 tela_recibo.btFecharRecibo.clicked.connect(fechar_recibo)
+
+#BOTAO RELATORIO
+vendas.btPesquisa.clicked.connect(pesquisaRelatorio)
+
 
 #FECHAR APLICACAO
 vendas.btFechar.clicked.connect(fechar_app)
